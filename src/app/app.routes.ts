@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { GarageComponent } from './components/garage.component';
 import { WinnersComponent } from './components/winners.component';
+import { NotFoundComponent } from './shared/components/404-page.component';
 
 export const routes: Routes = [
   {
@@ -13,5 +14,5 @@ export const routes: Routes = [
     component: WinnersComponent,
   },
   { path: '', redirectTo: '/garage', pathMatch: 'full' },
-  // { path: '**', component: GarageComponent },!
+  { path: '**', component: NotFoundComponent },
 ];
