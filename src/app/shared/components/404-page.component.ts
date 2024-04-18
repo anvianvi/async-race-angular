@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import {
   Router,
   RouterLink,
@@ -27,7 +27,7 @@ import {
       </p>
       <p>
         You will be redirected to the home page automatically in
-        {{ counter }} seconds...
+        {{ counter() }} seconds...
       </p>
     </div>
   `,
@@ -73,16 +73,16 @@ import {
   ],
 })
 export class NotFoundComponent implements OnInit, OnDestroy {
-  counter: number = 9;
+  counter = signal(9);
   timer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.timer = setInterval(() => {
-      this.counter -= 1;
+      this.counter.update((value) => value - 1);
 
-      if (this.counter === 0) {
+      if (this.counter() === 0) {
         if (this.timer) {
           clearInterval(this.timer);
         }
