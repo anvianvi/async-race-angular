@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { Car } from '../types';
 import { CarImageComponent } from './car-image.component';
+import { StartDrivingButtonComponent } from './start-driving-button.component';
 
 @Component({
   selector: 'app-car-container',
@@ -9,6 +10,8 @@ import { CarImageComponent } from './car-image.component';
   template: `
     <div class="car-container" id="car-road-{{ car.id }}">
       <div class="controll-buttons">
+        <app-start-driving-button [id]="car.id"> </app-start-driving-button>
+
         <span class="car-name">{{ car.name }}</span>
       </div>
 
@@ -51,7 +54,7 @@ import { CarImageComponent } from './car-image.component';
       }
     `,
   ],
-  imports: [CarImageComponent],
+  imports: [CarImageComponent, StartDrivingButtonComponent],
 })
 export class CarContainerComponent {
   @Input() car!: Car;

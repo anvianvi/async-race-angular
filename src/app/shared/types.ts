@@ -7,3 +7,7 @@ export type GetCarsResponse = {
   items: Car[];
   count: number;
 };
+
+export type AnimationState = {
+  id: number;
+};
