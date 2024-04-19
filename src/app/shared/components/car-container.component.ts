@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 
 import { Car } from '../types';
+import { CarImageComponent } from './car-image.component';
 
 @Component({
   selector: 'app-car-container',
   standalone: true,
-  imports: [],
   template: `
     <div class="car-container" id="car-road-{{ car.id }}">
       <div class="controll-buttons">
@@ -13,6 +13,9 @@ import { Car } from '../types';
       </div>
 
       <div class="road">
+        <div class="car" id="car-{{ car.id }}">
+          <app-car-image color="{{ car.color }}"></app-car-image>
+        </div>
         <div class="flag" id="flag-{{ car.id }}">🏁</div>
       </div>
     </div>
@@ -43,17 +46,16 @@ import { Car } from '../types';
         transform: scaleX(-1);
         position: absolute;
         font-size: 40px;
-        bottom: 0px;
+        bottom: 10px;
         right: 80px;
       }
     `,
   ],
+  imports: [CarImageComponent],
 })
 export class CarContainerComponent {
   @Input() car!: Car;
 }
-
-// <div class="car" id="car-${car.id}">${carImage( car.color,)}</div>
 
 // <!-- <button class="start-engine-btn" id="start-engine-car-${car.id}"> -->
 // <!-- Start -->
