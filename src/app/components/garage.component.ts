@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Component, computed, OnInit } from '@angular/core';
 
-import { GetCaarsService } from './get-cars.service';
+import { GetCaarsService } from '../shared/services/api/get-cars.service';
 // import { RouterOutlet } from '@angular/router';
 
 @Component({

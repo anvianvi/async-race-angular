@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
-import { Car } from '../shared/types';
-import { API_URL } from '../shared/variables/api';
+import { Car } from '../../types';
+import { API_URL } from '../../variables/api';
 
 @Injectable({
   providedIn: 'root',
