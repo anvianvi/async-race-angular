@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { API_URL } from '../../variables/api';
@@ -37,7 +37,10 @@ export class CarEngineService {
       .patch<boolean>(`${API_URL}/engine?id=${id}&status=drive`, {})
       .pipe(
         catchError((error) => {
-          throw new Error(`Error driving car with ID ${id}:`, error);
+          if (error.status === 500) {
+            return of(false);
+          }
+          return of(true);
         }),
       );
   }

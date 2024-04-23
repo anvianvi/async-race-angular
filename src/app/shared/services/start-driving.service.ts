@@ -5,7 +5,7 @@ import { AnimationService } from './car-animation.service';
 import { PositionCalculationService } from './position-calculation.service';
 
 @Injectable({
-  providedIn: 'root', // Provide this service in the root injector
+  providedIn: 'root',
 })
 export class EngineService {
   constructor(
@@ -14,17 +14,14 @@ export class EngineService {
     private animationService: AnimationService,
   ) {}
 
-  async startDriving(id: number): Promise<{ success: boolean; id: number }> {
-    // Get DOM elements
+  async startDriving(id: number) {
     const car = document.getElementById(`car-${id}`) as HTMLElement;
     const flag = document.getElementById(`flag-${id}`) as HTMLElement;
     let time;
-
     // startButton.disabled = true;
 
-    // Start the car and get velocity and distance
-    this.carEngineService.startCar(id).subscribe((response) => {
-      const { velocity, distance } = response;
+    this.carEngineService.startCar(id).subscribe(async (startCarResponse) => {
+      const { velocity, distance } = startCarResponse;
       time = Math.round(distance / velocity);
 
       const carModelWidthInPx = 90;
@@ -32,41 +29,32 @@ export class EngineService {
         this.positionCalculationService.calculateDistance(car, flag) +
           carModelWidthInPx,
       );
-      this.animationService.animateCar(car, currentDistance, time);
+      const animationData = this.animationService.animateCar(
+        car,
+        currentDistance,
+        time,
+      );
+
+      this.carEngineService.driveCar(id).subscribe({
+        next: (driveCarResponse) => {
+          console.log(driveCarResponse);
+
+          if (!driveCarResponse) {
+            window.cancelAnimationFrame(animationData.id);
+            const engineBrokeMessage = document.getElementById(
+              `engine-broke-${id}`,
+            ) as HTMLElement;
+            const brokeEngine = document.getElementById(
+              `car-road-${id}`,
+            ) as HTMLElement;
+            brokeEngine.style.backgroundColor = 'palevioletred';
+            engineBrokeMessage.style.display = 'block';
+            const carName =
+              brokeEngine.querySelector('.car-name')?.textContent || '';
+            engineBrokeMessage.innerHTML = `${carName} is out of race because the engine was broken down`;
+          }
+        },
+      });
     });
-
-    // Enable stop button
-    // stopButton.disabled = false;
-
-    // // Calculate current distance
-    // const carModelWidthInPx = 90;
-    // const currentDistance = Math.floor(
-    //   this.positionCalculationService.calculateDistance(car, flag) +
-    //     carModelWidthInPx,
-    // );
-
-    // // Start animation
-    // const animationData = this.animationService.animateCar(
-    //   car,
-    //   currentDistance,
-    //   time,
-    // );
-    // console.log(animationData);
-    // // store.animation[id] = animationData;
-
-    // // Drive the car
-    // const driveData = await driveCar(id);
-    // const { success } = driveData;
-
-    // // Handle engine breakdown
-    // if (!success) {
-    //   window.cancelAnimationFrame(animationData.id);
-    //   engineBrokeMessage.style.display = 'block';
-    //   const carName =
-    //     engineBrokeMessage.querySelector('.car-name')?.textContent || '';
-    //   engineBrokeMessage.innerHTML = `${carName} is out of race because the engine was broken down`;
-    // }
-    const success = true;
-    return { success, id };
   }
 }

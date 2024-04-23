@@ -21,6 +21,7 @@ import { StartDrivingButtonComponent } from './start-driving-button.component';
         </div>
         <div class="flag" id="flag-{{ car.id }}">🏁</div>
       </div>
+      <div id="engine-broke-{{ car.id }}" class="message"></div>
     </div>
   `,
   styles: [
@@ -51,6 +52,17 @@ import { StartDrivingButtonComponent } from './start-driving-button.component';
         font-size: 40px;
         bottom: 10px;
         right: 80px;
+      }
+      .message {
+        position: absolute;
+        bottom: 24%;
+        left: 7%;
+        color: red;
+        font-weight: 700;
+        font-size: 21px;
+        width: 430px;
+        text-align: center;
+        margin-right: -50%;
       }
     `,
   ],

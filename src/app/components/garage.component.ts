@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Component, computed, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, computed, OnInit } from '@angular/core';
 
 import { CarContainerComponent } from '../shared/components/car-container.component';
 import { GetCaarsService } from '../shared/services/api/get-cars.service';
@@ -29,7 +29,7 @@ import { GetCaarsService } from '../shared/services/api/get-cars.service';
   `,
   imports: [CarContainerComponent],
 })
-export class GarageComponent implements OnInit {
+export class GarageComponent implements OnInit, AfterViewChecked {
   cars = computed(() => {
     return this.getCarsService.carsInGarage();
   });
@@ -38,6 +38,12 @@ export class GarageComponent implements OnInit {
   });
 
   constructor(private getCarsService: GetCaarsService) {}
+
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method, class-methods-use-this
+  ngAfterViewChecked(): void {
+    // console.log('Change detection triggered!');
+    // console.log(this.cars());
+  }
 
   ngOnInit(): void {
     this.getCarsService.getCars();
