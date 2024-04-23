@@ -14,3 +14,9 @@ export type GetCarsResponse = {
   items: Car[];
   count: number;
 };
+
+export type GetWinnerResponse = {
+  id: number;
+  wins: number;
+  time: number;
+};

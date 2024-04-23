@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 
 import { CarDrivingService } from '../services/car-driving.service';
 import { Car } from '../types';
+import { RemoveCarButtonComponent } from './buttons/remove-car-button.component';
+import { StartDrivingButtonComponent } from './buttons/start-driving-button.component';
+import { StopDrivingButtonComponent } from './buttons/stop-driving-button.component';
 import { CarImageComponent } from './car-image.component';
-import { StartDrivingButtonComponent } from './start-driving-button.component';
-import { StopDrivingButtonComponent } from './stop-driving-button.component';
 
 @Component({
   selector: 'app-car-container',
@@ -14,8 +15,8 @@ import { StopDrivingButtonComponent } from './stop-driving-button.component';
       <div class="controll-buttons">
         <app-start-driving-button [id]="car.id"> </app-start-driving-button>
         <app-stop-driving-button [id]="car.id"> </app-stop-driving-button>
-
         <span class="car-name">{{ car.name }}</span>
+        <app-remove-car-button [id]="car.id"> </app-remove-car-button>
       </div>
 
       <div class="road" id="car-road-{{ car.id }}">
@@ -79,6 +80,7 @@ import { StopDrivingButtonComponent } from './stop-driving-button.component';
     CarImageComponent,
     StartDrivingButtonComponent,
     StopDrivingButtonComponent,
+    RemoveCarButtonComponent,
   ],
 })
 export class CarContainerComponent {

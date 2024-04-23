@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { CarDrivingService } from '../services/car-driving.service';
+import { CarDrivingService } from '../../services/car-driving.service';
 
 @Component({
   selector: 'app-stop-driving-button',
