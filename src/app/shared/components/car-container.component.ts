@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+import { CarDrivingService } from '../services/car-driving.service';
 import { Car } from '../types';
 import { CarImageComponent } from './car-image.component';
 import { StartDrivingButtonComponent } from './start-driving-button.component';
@@ -22,9 +23,11 @@ import { StopDrivingButtonComponent } from './stop-driving-button.component';
           <app-car-image color="{{ car.color }}"></app-car-image>
         </div>
         <div class="flag" id="flag-{{ car.id }}">🏁</div>
-        <div id="engine-broke-{{ car.id }}" class="message">
-          Sad ;&lpar; Engine Broke Down
-        </div>
+        @if (isEngineBroken(car.id)) {
+          <div id="engine-broke-{{ car.id }}" class="message">
+            Sad ;&lpar; Engine Broke Down
+          </div>
+        }
       </div>
     </div>
   `,
@@ -58,7 +61,6 @@ import { StopDrivingButtonComponent } from './stop-driving-button.component';
         right: 80px;
       }
       .message {
-        display: none;
         position: absolute;
         bottom: 0;
         left: 0;
@@ -81,6 +83,12 @@ import { StopDrivingButtonComponent } from './stop-driving-button.component';
 })
 export class CarContainerComponent {
   @Input() car!: Car;
+
+  constructor(private carDrivingService: CarDrivingService) {}
+
+  isEngineBroken(id: number): boolean {
+    return this.carDrivingService.isEngineBroken(id);
+  }
 }
 
 // <!-- <button class="start-engine-btn" id="start-engine-car-${car.id}"> -->

@@ -4,15 +4,14 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class PositionCalculationService {
-  // eslint-disable-next-line class-methods-use-this
-  calculatePosition(element: HTMLElement): number {
+  static calculatePosition = (element: HTMLElement): number => {
     const { left, width } = element.getBoundingClientRect();
     return left + width;
-  }
+  };
 
-  calculateDistance(start: HTMLElement, finish: HTMLElement): number {
-    const startPosition = this.calculatePosition(start);
-    const finishPosition = this.calculatePosition(finish);
+  static calculateDistance(start: HTMLElement, finish: HTMLElement): number {
+    const startPosition = PositionCalculationService.calculatePosition(start);
+    const finishPosition = PositionCalculationService.calculatePosition(finish);
     return finishPosition - startPosition;
   }
 }

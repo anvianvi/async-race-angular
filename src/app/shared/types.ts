@@ -3,7 +3,3 @@ export type Car = {
   color: string;
   id: number;
 };
-export type GetCarsResponse = {
-  items: Car[];
-  count: number;
-};

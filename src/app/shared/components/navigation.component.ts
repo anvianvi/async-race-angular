@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-// import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
@@ -39,6 +38,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       nav {
         display: flex;
         gap: 30px;
+        width: fit-content;
+        margin-inline: auto;
       }
     }
     .nav-button {

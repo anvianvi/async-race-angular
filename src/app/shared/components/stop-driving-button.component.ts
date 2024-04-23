@@ -8,16 +8,20 @@ import { CarDrivingService } from '../services/car-driving.service';
   template: `<button
     id="stop-engine-car-{{ id }}"
     (click)="stopDriving(id)"
-    disabled="true"
+    [disabled]="!canStopDriving(id)"
   >
     Stop Ride
-  </button> `,
+  </button>`,
   styles: ``,
 })
 export class StopDrivingButtonComponent {
   constructor(private carDrivingService: CarDrivingService) {}
 
   @Input() id!: number;
+
+  canStopDriving(id: number): boolean {
+    return this.carDrivingService.canStopCar(id);
+  }
 
   stopDriving(id: number) {
     this.carDrivingService.stopDriving(id);

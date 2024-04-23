@@ -8,23 +8,30 @@ import { PositionCalculationService } from './position-calculation.service';
   providedIn: 'root',
 })
 export class CarDrivingService {
+  private drivingCarStatuses = new Map<number, boolean>();
+  private stopingngCarStatuses = new Map<number, boolean>();
+  private brokenEngineStatuses = new Map<number, boolean>();
+
   constructor(
     private carEngineService: CarEngineService,
-    private positionCalculationService: PositionCalculationService,
     private animationService: AnimationService,
   ) {}
 
+  canStartCar(id: number): boolean {
+    return this.drivingCarStatuses.get(id) ?? true;
+  }
+  canStopCar(id: number): boolean {
+    return this.stopingngCarStatuses.get(id) ?? false;
+  }
+  isEngineBroken(id: number): boolean {
+    return this.brokenEngineStatuses.get(id) ?? false;
+  }
+
   async startDriving(id: number) {
+    this.drivingCarStatuses.set(id, false);
+
     const car = document.getElementById(`car-${id}`) as HTMLElement;
     const flag = document.getElementById(`flag-${id}`) as HTMLElement;
-    const startButton = document.getElementById(
-      `start-engine-car-${id}`,
-    ) as HTMLButtonElement;
-    const stopButton = document.getElementById(
-      `stop-engine-car-${id}`,
-    ) as HTMLButtonElement;
-
-    startButton.disabled = true;
 
     this.carEngineService.startCar(id).subscribe(async (startCarResponse) => {
       const { velocity, distance } = startCarResponse;
@@ -32,7 +39,7 @@ export class CarDrivingService {
 
       const carModelWidthInPx = 90;
       const currentDistance = Math.floor(
-        this.positionCalculationService.calculateDistance(car, flag) +
+        PositionCalculationService.calculateDistance(car, flag) +
           carModelWidthInPx,
       );
 
@@ -42,39 +49,28 @@ export class CarDrivingService {
         next: (driveCarResponse) => {
           if (!driveCarResponse) {
             this.animationService.stopAnimation(id);
-            const engineBrokeMessage = document.getElementById(
-              `engine-broke-${id}`,
-            ) as HTMLElement;
-            engineBrokeMessage.style.display = 'block';
+            this.brokenEngineStatuses.set(id, true);
           }
         },
       });
     });
 
-    stopButton.disabled = false;
+    this.stopingngCarStatuses.set(id, true);
   }
 
   async stopDriving(id: number) {
-    this.animationService.stopAnimation(id);
+    this.stopingngCarStatuses.set(id, false);
 
-    const startButton = document.getElementById(
-      `start-engine-car-${id}`,
-    ) as HTMLButtonElement;
-    const stopButton = document.getElementById(
-      `stop-engine-car-${id}`,
-    ) as HTMLButtonElement;
-    const engineBrokeMessage = document.getElementById(
-      `engine-broke-${id}`,
-    ) as HTMLElement;
-
-    stopButton.disabled = true;
     this.carEngineService.stopCar(id).subscribe({
       next: () => {
         this.animationService.stopAnimation(id);
+
         const car = document.getElementById(`car-${id}`);
         if (car) car.style.transform = 'translateX(0)';
-        engineBrokeMessage.style.display = 'none';
-        startButton.disabled = false;
+
+        this.brokenEngineStatuses.set(id, false);
+        this.animationService.stopAnimation(id);
+        this.drivingCarStatuses.set(id, true);
       },
     });
   }
