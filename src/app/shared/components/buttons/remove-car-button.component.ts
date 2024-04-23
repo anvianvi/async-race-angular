@@ -35,14 +35,15 @@ export class RemoveCarButtonComponent {
 
     this.crudCarService.deleteCar(id).subscribe({
       next: () => {
-        this.getCarsService.getCars();
         this.crudWonnerService.getWinner(id).subscribe({
           next: (winner) => {
+            console.log(winner);
             if (winner) {
-              this.crudWonnerService.deleteWinner(id);
+              this.crudWonnerService.deleteWinner(id).subscribe();
             }
           },
         });
+        this.getCarsService.getCars();
       },
     });
   }
