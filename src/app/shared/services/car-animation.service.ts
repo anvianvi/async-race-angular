@@ -1,18 +1,23 @@
 import { Injectable, NgZone } from '@angular/core';
 
-import { AnimationState } from '../types';
+export type AnimationState = {
+  id: number;
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnimationService {
+  private animations: AnimationState[] = [];
+
   constructor(private ngZone: NgZone) {}
 
-  animateCar(
+  startAnimation(
+    carId: number,
     car: HTMLElement,
     distance: number,
     animationTime: number,
-  ): AnimationState {
+  ): void {
     const state: AnimationState = { id: 0 };
     const startTime = performance.now();
 
@@ -33,7 +38,10 @@ export class AnimationService {
       state.id = window.requestAnimationFrame(animate);
     });
 
-    // console.log(state);
-    return state;
+    this.animations[carId] = state;
+  }
+
+  stopAnimation(carId: number) {
+    window.cancelAnimationFrame(this.animations[carId].id);
   }
 }

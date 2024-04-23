@@ -1,18 +1,20 @@
 import { Component, Input } from '@angular/core';
 
-import { EngineService } from '../services/start-driving.service';
+import { CarDrivingService } from '../services/car-driving.service';
 
 @Component({
   selector: 'app-start-driving-button',
   standalone: true,
-  template: `<button (click)="startDriving(id)">Start Ride</button>`,
+  template: `<button id="start-engine-car-{{ id }}" (click)="startDriving(id)">
+    Start Ride
+  </button>`,
 })
 export class StartDrivingButtonComponent {
-  constructor(private engineService: EngineService) {}
+  constructor(private carDrivingService: CarDrivingService) {}
 
   @Input() id!: number;
 
   startDriving(id: number) {
-    this.engineService.startDriving(id);
+    this.carDrivingService.startDriving(id);
   }
 }

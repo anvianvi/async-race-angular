@@ -15,21 +15,13 @@ export class CarEngineService {
   startCar(id: number): Observable<StartCarResponse> {
     return this.http
       .patch<StartCarResponse>(`${API_URL}/engine?id=${id}&status=started`, {})
-      .pipe(
-        catchError((error) => {
-          throw new Error(`Error starting car with ID ${id}: ${error}`);
-        }),
-      );
+      .pipe();
   }
 
   stopCar(id: number): Observable<void> {
     return this.http
       .patch<void>(`${API_URL}/engine?id=${id}&status=stopped`, {})
-      .pipe(
-        catchError((error) => {
-          throw new Error(`Error stopping car with ID ${id}: ${error}`);
-        }),
-      );
+      .pipe();
   }
 
   driveCar(id: number): Observable<boolean> {

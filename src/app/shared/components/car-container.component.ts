@@ -3,25 +3,29 @@ import { Component, Input } from '@angular/core';
 import { Car } from '../types';
 import { CarImageComponent } from './car-image.component';
 import { StartDrivingButtonComponent } from './start-driving-button.component';
+import { StopDrivingButtonComponent } from './stop-driving-button.component';
 
 @Component({
   selector: 'app-car-container',
   standalone: true,
   template: `
-    <div class="car-container" id="car-road-{{ car.id }}">
+    <div class="car-container">
       <div class="controll-buttons">
         <app-start-driving-button [id]="car.id"> </app-start-driving-button>
+        <app-stop-driving-button [id]="car.id"> </app-stop-driving-button>
 
         <span class="car-name">{{ car.name }}</span>
       </div>
 
-      <div class="road">
+      <div class="road" id="car-road-{{ car.id }}">
         <div class="car" id="car-{{ car.id }}">
           <app-car-image color="{{ car.color }}"></app-car-image>
         </div>
         <div class="flag" id="flag-{{ car.id }}">🏁</div>
+        <div id="engine-broke-{{ car.id }}" class="message">
+          Sad ;&lpar; Engine Broke Down
+        </div>
       </div>
-      <div id="engine-broke-{{ car.id }}" class="message"></div>
     </div>
   `,
   styles: [
@@ -54,19 +58,26 @@ import { StartDrivingButtonComponent } from './start-driving-button.component';
         right: 80px;
       }
       .message {
+        display: none;
         position: absolute;
-        bottom: 24%;
-        left: 7%;
-        color: red;
-        font-weight: 700;
-        font-size: 21px;
-        width: 430px;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding-top: 14px;
+        color: #143d59;
+        font-weight: 500;
+        font-size: 20px;
         text-align: center;
-        margin-right: -50%;
+        background: rgb(203 114 114 / 80%);
       }
     `,
   ],
-  imports: [CarImageComponent, StartDrivingButtonComponent],
+  imports: [
+    CarImageComponent,
+    StartDrivingButtonComponent,
+    StopDrivingButtonComponent,
+  ],
 })
 export class CarContainerComponent {
   @Input() car!: Car;
