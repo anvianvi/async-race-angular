@@ -20,9 +20,11 @@ export class CarDrivingService {
   canStartCar(id: number): boolean {
     return this.drivingCarStatuses.get(id) ?? true;
   }
+
   canStopCar(id: number): boolean {
     return this.stopingngCarStatuses.get(id) ?? false;
   }
+
   isEngineBroken(id: number): boolean {
     return this.brokenEngineStatuses.get(id) ?? false;
   }

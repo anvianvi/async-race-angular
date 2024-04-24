@@ -1,12 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 
-import { Car } from '../../types';
 import { API_URL } from '../../variables/api';
+import { Car } from './api-types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GetCaarsService {
+export class GetCarsService {
   carsInGarage = signal<Car[] | []>([]);
   totalAmountofCarsInGarage = signal<number>(0);
 

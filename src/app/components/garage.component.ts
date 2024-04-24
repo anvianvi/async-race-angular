@@ -1,21 +1,20 @@
 /* eslint-disable no-console */
 import { AfterViewChecked, Component, computed, OnInit } from '@angular/core';
 
+import { ActivityPanelComponent } from '../shared/components/activity-panel.component';
 import { CarContainerComponent } from '../shared/components/car-container.component';
-import { GetCaarsService } from '../shared/services/api/get-cars.service';
-// import { RouterOutlet } from '@angular/router';
+import { GetCarsService } from '../shared/services/api/get-cars.service';
 
 @Component({
   selector: 'app-garage-page',
   standalone: true,
-  // imports: [RouterOutlet],
   template: `<div class="garage-view">
+    <app-activity-panel></app-activity-panel>
     my garage curently have {{ carsCount() }} cars:
 
     @if (cars().length > 0) {
       @for (car of cars(); track car.id) {
         <app-car-container [car]="car"></app-car-container>
-        <!-- <li>{{ car.name }} - {{ car.color }}</li> -->
       }
     } @else {
       <p>pls w8 we warm up the server</p>
@@ -27,7 +26,7 @@ import { GetCaarsService } from '../shared/services/api/get-cars.service';
       margin-inline: auto;
     }
   `,
-  imports: [CarContainerComponent],
+  imports: [CarContainerComponent, ActivityPanelComponent],
 })
 export class GarageComponent implements OnInit, AfterViewChecked {
   cars = computed(() => {
@@ -37,12 +36,11 @@ export class GarageComponent implements OnInit, AfterViewChecked {
     return this.getCarsService.totalAmountofCarsInGarage();
   });
 
-  constructor(private getCarsService: GetCaarsService) {}
+  constructor(private getCarsService: GetCarsService) {}
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method, class-methods-use-this
   ngAfterViewChecked(): void {
-    // console.log('Change detection triggered!');
-    // console.log(this.cars());
+    console.log('Change detection triggered!');
   }
 
   ngOnInit(): void {

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { CrudCarService } from '../../services/api/crud-car.service';
 import { CrudWinnerService } from '../../services/api/crud-winner.service';
-import { GetCaarsService } from '../../services/api/get-cars.service';
+import { GetCarsService } from '../../services/api/get-cars.service';
 
 @Component({
   selector: 'app-remove-car-button',
@@ -25,7 +25,7 @@ export class RemoveCarButtonComponent {
   constructor(
     private crudCarService: CrudCarService,
     private crudWonnerService: CrudWinnerService,
-    private getCarsService: GetCaarsService,
+    private getCarsService: GetCarsService,
   ) {}
 
   @Input() id!: number;
@@ -41,9 +41,12 @@ export class RemoveCarButtonComponent {
               this.crudWonnerService.deleteWinner(id).subscribe();
             }
           },
+          error: () => {},
         });
+
         this.getCarsService.getCars();
       },
+      error: () => {},
     });
   }
 }
