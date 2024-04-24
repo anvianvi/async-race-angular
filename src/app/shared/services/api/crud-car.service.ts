@@ -20,6 +20,14 @@ export class CrudCarService {
       .pipe();
   }
 
+  updateCar(body: CarTemplate, id: number): Observable<Car> {
+    return this.http
+      .put<Car>(`${API_URL}/garage/${id}`, body, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .pipe();
+  }
+
   deleteCar(id: number): Observable<void> {
     return this.http.delete<void>(`${API_URL}/garage/${id}`, {}).pipe();
   }

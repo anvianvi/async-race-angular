@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { Car } from '../services/api/api-types';
 import { CarDrivingService } from '../services/car-driving.service';
+import { EditCarButtonComponent } from './buttons/edit-car-button.component';
 import { RemoveCarButtonComponent } from './buttons/remove-car-button.component';
 import { StartDrivingButtonComponent } from './buttons/start-driving-button.component';
 import { StopDrivingButtonComponent } from './buttons/stop-driving-button.component';
@@ -17,6 +18,7 @@ import { CarImageComponent } from './car-image.component';
         <app-stop-driving-button [id]="car.id"> </app-stop-driving-button>
         <span class="car-name">{{ car.name }}</span>
         <app-remove-car-button [id]="car.id"> </app-remove-car-button>
+        <app-edit-car-button [car]="car"></app-edit-car-button>
       </div>
 
       <div class="road" id="car-road-{{ car.id }}">
@@ -81,6 +83,7 @@ import { CarImageComponent } from './car-image.component';
     StartDrivingButtonComponent,
     StopDrivingButtonComponent,
     RemoveCarButtonComponent,
+    EditCarButtonComponent,
   ],
 })
 export class CarContainerComponent {

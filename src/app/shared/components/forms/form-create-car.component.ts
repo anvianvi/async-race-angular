@@ -3,7 +3,10 @@ import { FormsModule } from '@angular/forms';
 
 import { CrudCarService } from '../../services/api/crud-car.service';
 import { GetCarsService } from '../../services/api/get-cars.service';
-import { RandomGeneratorsService } from '../../services/random-generators.service';
+import {
+  CarTemplate,
+  RandomGeneratorsService,
+} from '../../services/random-generators.service';
 
 @Component({
   imports: [FormsModule],
@@ -45,7 +48,7 @@ import { RandomGeneratorsService } from '../../services/random-generators.servic
   `,
 })
 export class CreateCarFormComponent implements OnInit {
-  car = { name: '', color: '' };
+  car: CarTemplate = { name: '', color: '' };
   creationInProgress = false;
   colorInput!: HTMLInputElement;
 
