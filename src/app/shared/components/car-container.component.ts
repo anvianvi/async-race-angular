@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+import { Car } from '../services/api/api-types';
 import { CarDrivingService } from '../services/car-driving.service';
-import { Car } from '../types';
 import { RemoveCarButtonComponent } from './buttons/remove-car-button.component';
 import { StartDrivingButtonComponent } from './buttons/start-driving-button.component';
 import { StopDrivingButtonComponent } from './buttons/stop-driving-button.component';

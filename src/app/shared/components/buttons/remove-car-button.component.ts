@@ -37,7 +37,6 @@ export class RemoveCarButtonComponent {
       next: () => {
         this.crudWonnerService.getWinner(id).subscribe({
           next: (winner) => {
-            console.log(winner);
             if (winner) {
               this.crudWonnerService.deleteWinner(id).subscribe();
             }

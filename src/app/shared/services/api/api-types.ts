@@ -3,8 +3,6 @@
 //   count: string | null;
 // };
 
-import { Car } from '../../types';
-
 export type StartCarResponse = {
   velocity: number;
   distance: number;
@@ -13,6 +11,12 @@ export type StartCarResponse = {
 export type GetCarsResponse = {
   items: Car[];
   count: number;
+};
+
+export type Car = {
+  name: string;
+  color: string;
+  id: number;
 };
 
 export type GetWinnerResponse = {
