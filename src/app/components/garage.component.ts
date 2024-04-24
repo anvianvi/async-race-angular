@@ -2,6 +2,7 @@
 import { AfterViewChecked, Component, computed, OnInit } from '@angular/core';
 
 import { ActivityPanelComponent } from '../shared/components/activity-panel.component';
+import { CreateCarButtonComponent } from '../shared/components/buttons/create-car-button.component';
 import { CarContainerComponent } from '../shared/components/car-container.component';
 import { GetCarsService } from '../shared/services/api/get-cars.service';
 
@@ -11,6 +12,7 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
   template: `<div class="garage-view">
     <app-activity-panel></app-activity-panel>
     my garage curently have {{ carsCount() }} cars:
+    <app-create-car-button></app-create-car-button>
 
     @if (cars().length > 0) {
       @for (car of cars(); track car.id) {
@@ -26,7 +28,11 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
       margin-inline: auto;
     }
   `,
-  imports: [CarContainerComponent, ActivityPanelComponent],
+  imports: [
+    CarContainerComponent,
+    ActivityPanelComponent,
+    CreateCarButtonComponent,
+  ],
 })
 export class GarageComponent implements OnInit, AfterViewChecked {
   cars = computed(() => {
