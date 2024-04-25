@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { AfterViewChecked, Component, computed, OnInit } from '@angular/core';
 
-import { ActivityPanelComponent } from '../shared/components/activity-panel.component';
+import { GeneratePackOfCarsButtonComponent } from '../shared/components/buttons/crate-pack-of-cars-button.component';
 import { CreateCarButtonComponent } from '../shared/components/buttons/create-car-button.component';
 import { CarContainerComponent } from '../shared/components/car-container.component';
 import { GetCarsService } from '../shared/services/api/get-cars.service';
@@ -10,9 +10,9 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
   selector: 'app-garage-page',
   standalone: true,
   template: `<div class="garage-view">
-    <app-activity-panel></app-activity-panel>
-    my garage curently have {{ carsCount() }} cars:
+    {{ carsCount() }} cars in garage
     <app-create-car-button></app-create-car-button>
+    <app-create-pack-of-cars-button></app-create-pack-of-cars-button>
 
     @if (cars().length > 0) {
       @for (car of cars(); track car.id) {
@@ -30,8 +30,9 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
   `,
   imports: [
     CarContainerComponent,
-    ActivityPanelComponent,
+    // ActivityPanelComponent,
     CreateCarButtonComponent,
+    GeneratePackOfCarsButtonComponent,
   ],
 })
 export class GarageComponent implements OnInit, AfterViewChecked {

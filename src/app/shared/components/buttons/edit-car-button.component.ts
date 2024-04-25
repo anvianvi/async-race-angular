@@ -8,9 +8,7 @@ import { EditCarDialogComponent } from '../edit-car-dialog.component';
   imports: [MatDialogModule],
   selector: 'app-edit-car-button',
   standalone: true,
-  template: `
-    <button mat-button (click)="openEditCarDialog()">edit car</button>
-  `,
+  template: ` <button (click)="openEditCarDialog()">edit car</button> `,
   styles: ``,
 })
 export class EditCarButtonComponent {
