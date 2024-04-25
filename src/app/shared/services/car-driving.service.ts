@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { CarEngineService } from './api/car-engine.service';
 import { AnimationService } from './car-animation.service';
 import { PositionCalculationService } from './position-calculation.service';
+import { CarRaceResults } from './types';
 
 @Injectable({
   providedIn: 'root',
@@ -29,35 +30,32 @@ export class CarDrivingService {
     return this.brokenEngineStatuses.get(id) ?? false;
   }
 
-  async startDriving(id: number) {
+  async startDriving(id: number): Promise<CarRaceResults> {
     this.drivingCarStatuses.set(id, false);
 
     const car = document.getElementById(`car-${id}`) as HTMLElement;
     const flag = document.getElementById(`flag-${id}`) as HTMLElement;
 
-    this.carEngineService.startCar(id).subscribe(async (startCarResponse) => {
-      const { velocity, distance } = startCarResponse;
-      const time = Math.round(distance / velocity);
+    const { velocity, distance } = await CarEngineService.startCar(id);
+    const time = Math.round(distance / velocity);
 
-      const carModelWidthInPx = 90;
-      const currentDistance = Math.floor(
-        PositionCalculationService.calculateDistance(car, flag) +
-          carModelWidthInPx,
-      );
+    const carModelWidthInPx = 90;
+    const currentDistance = Math.floor(
+      PositionCalculationService.calculateDistance(car, flag) +
+        carModelWidthInPx,
+    );
 
-      this.animationService.startAnimation(id, car, currentDistance, time);
-
-      this.carEngineService.driveCar(id).subscribe({
-        next: (driveCarResponse) => {
-          if (!driveCarResponse) {
-            this.animationService.stopAnimation(id);
-            this.brokenEngineStatuses.set(id, true);
-          }
-        },
-      });
-    });
+    this.animationService.startAnimation(id, car, currentDistance, time);
 
     this.stopingngCarStatuses.set(id, true);
+    const { success } = await CarEngineService.driveCar(id);
+
+    if (!success) {
+      this.animationService.stopAnimation(id);
+      this.brokenEngineStatuses.set(id, true);
+    }
+
+    return { success, id, time };
   }
 
   async stopDriving(id: number) {

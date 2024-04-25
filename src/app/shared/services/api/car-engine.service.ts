@@ -1,10 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { API_URL } from '../../variables/api';
-import { StartCarResponse } from './api-types';
+
+type CarDriveResponse = {
+  success: boolean;
+};
+
+type CarRaceStatsResponse = {
+  velocity: number;
+  distance: number;
+};
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +19,19 @@ import { StartCarResponse } from './api-types';
 export class CarEngineService {
   constructor(private http: HttpClient) {}
 
-  startCar(id: number): Observable<StartCarResponse> {
-    return this.http
-      .patch<StartCarResponse>(`${API_URL}/engine?id=${id}&status=started`, {})
-      .pipe();
-  }
+  static startCar = async (id: number): Promise<CarRaceStatsResponse> => {
+    try {
+      const response = await fetch(
+        `${API_URL}/engine?id=${id}&status=started`,
+        {
+          method: 'PATCH',
+        },
+      );
+      return (await response.json()) as CarRaceStatsResponse;
+    } catch (error) {
+      throw new Error(`Error starting car with ID ${id}: ${error}`);
+    }
+  };
 
   stopCar(id: number): Observable<void> {
     return this.http
@@ -24,16 +39,14 @@ export class CarEngineService {
       .pipe();
   }
 
-  driveCar(id: number): Observable<boolean> {
-    return this.http
-      .patch<boolean>(`${API_URL}/engine?id=${id}&status=drive`, {})
-      .pipe(
-        catchError((error) => {
-          if (error.status === 500) {
-            return of(false);
-          }
-          return of(true);
-        }),
-      );
+  static async driveCar(id: number): Promise<CarDriveResponse> {
+    try {
+      const response = await fetch(`${API_URL}/engine?id=${id}&status=drive`, {
+        method: 'PATCH',
+      });
+      return { ...(await response.json()), success: true };
+    } catch (error) {
+      return { success: false };
+    }
   }
 }
