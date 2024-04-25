@@ -13,7 +13,11 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
     {{ carsCount() }} cars in garage
     <app-create-car-button></app-create-car-button>
     <app-create-pack-of-cars-button></app-create-pack-of-cars-button>
-
+    <div>Page № {{ carsCurrentPage() }}</div>
+    <button (click)="paginationLeft()" [disabled]="carsCurrentPage() < 2">
+      PREV
+    </button>
+    <button (click)="paginationRight()" [disabled]="isLastPage()">NEXT</button>
     @if (cars().length > 0) {
       @for (car of cars(); track car.id) {
         <app-car-container [car]="car"></app-car-container>
@@ -30,7 +34,6 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
   `,
   imports: [
     CarContainerComponent,
-    // ActivityPanelComponent,
     CreateCarButtonComponent,
     GeneratePackOfCarsButtonComponent,
   ],
@@ -42,6 +45,15 @@ export class GarageComponent implements OnInit, AfterViewChecked {
   carsCount = computed(() => {
     return this.getCarsService.totalAmountofCarsInGarage();
   });
+  carsCurrentPage = computed(() => {
+    return this.getCarsService.carsCurrentPage();
+  });
+  isLastPage = computed(() => {
+    return (
+      this.carsCount() / this.getCarsService.elementsPerPage <=
+      this.getCarsService.carsCurrentPage()
+    );
+  });
 
   constructor(private getCarsService: GetCarsService) {}
 
@@ -51,6 +63,19 @@ export class GarageComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.getCarsService.getCars();
+  }
+  paginationLeft() {
+    this.getCarsService.carsCurrentPage.set(
+      this.getCarsService.carsCurrentPage() - 1,
+    );
+    this.getCarsService.getCars();
+  }
+  paginationRight() {
+    this.getCarsService.carsCurrentPage.set(
+      this.getCarsService.carsCurrentPage() + 1,
+    );
+
     this.getCarsService.getCars();
   }
 }

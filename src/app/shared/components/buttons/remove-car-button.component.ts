@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, Input } from '@angular/core';
 
 import { CrudCarService } from '../../services/api/crud-car.service';
 import { CrudWinnerService } from '../../services/api/crud-winner.service';
@@ -22,6 +22,13 @@ import { GetCarsService } from '../../services/api/get-cars.service';
 export class RemoveCarButtonComponent {
   deletingIsInProgress = false;
 
+  carsCount = computed(() => {
+    return this.getCarsService.totalAmountofCarsInGarage();
+  });
+  carsCurrentPage = computed(() => {
+    return this.getCarsService.carsCurrentPage();
+  });
+
   constructor(
     private crudCarService: CrudCarService,
     private crudWonnerService: CrudWinnerService,
@@ -43,6 +50,13 @@ export class RemoveCarButtonComponent {
           },
           error: () => {},
         });
+        const lastValidPage = Math.ceil(
+          (this.carsCount() - 1) / this.getCarsService.elementsPerPage,
+        );
+
+        this.getCarsService.carsCurrentPage.set(
+          Math.min(this.carsCurrentPage(), lastValidPage),
+        );
 
         this.getCarsService.getCars();
       },

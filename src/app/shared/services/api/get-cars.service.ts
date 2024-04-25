@@ -9,13 +9,13 @@ import { Car } from './api-types';
 export class GetCarsService {
   carsInGarage = signal<Car[] | []>([]);
   totalAmountofCarsInGarage = signal<number>(0);
+  carsCurrentPage = signal<number>(1);
+  elementsPerPageAccordingToRequirements = 7;
+  elementsPerPage = this.elementsPerPageAccordingToRequirements;
 
-  getCars = async (
-    currentPageNumber: number = 1,
-    elementsPerPage: number = 7,
-  ) => {
+  getCars = async () => {
     const response = await fetch(
-      `${API_URL}/garage?_page=${currentPageNumber}&_limit=${elementsPerPage}`,
+      `${API_URL}/garage?_page=${this.carsCurrentPage()}&_limit=${this.elementsPerPage}`,
     );
 
     const count = Number(response.headers.get('X-Total-Count'));
