@@ -4,6 +4,7 @@ import { AfterViewChecked, Component, computed, OnInit } from '@angular/core';
 import { GeneratePackOfCarsButtonComponent } from '../shared/components/buttons/crate-pack-of-cars-button.component';
 import { CreateCarButtonComponent } from '../shared/components/buttons/create-car-button.component';
 import { CarContainerComponent } from '../shared/components/car-container.component';
+import { RaceControlComponent } from '../shared/components/reace-controll.component';
 import { GetCarsService } from '../shared/services/api/get-cars.service';
 
 @Component({
@@ -13,6 +14,7 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
     {{ carsCount() }} cars in garage
     <app-create-car-button></app-create-car-button>
     <app-create-pack-of-cars-button></app-create-pack-of-cars-button>
+    <app-race-control [cars]="cars()"></app-race-control>
     <div>Page № {{ carsCurrentPage() }}</div>
     <button (click)="paginationLeft()" [disabled]="carsCurrentPage() < 2">
       PREV
@@ -36,6 +38,7 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
     CarContainerComponent,
     CreateCarButtonComponent,
     GeneratePackOfCarsButtonComponent,
+    RaceControlComponent,
   ],
 })
 export class GarageComponent implements OnInit, AfterViewChecked {
