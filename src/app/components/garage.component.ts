@@ -69,16 +69,11 @@ export class GarageComponent implements OnInit, AfterViewChecked {
     this.getCarsService.getCars();
   }
   paginationLeft() {
-    this.getCarsService.carsCurrentPage.set(
-      this.getCarsService.carsCurrentPage() - 1,
-    );
+    this.getCarsService.carsCurrentPage.update((value) => value - 1);
     this.getCarsService.getCars();
   }
   paginationRight() {
-    this.getCarsService.carsCurrentPage.set(
-      this.getCarsService.carsCurrentPage() + 1,
-    );
-
+    this.getCarsService.carsCurrentPage.update((value) => value + 1);
     this.getCarsService.getCars();
   }
 }
