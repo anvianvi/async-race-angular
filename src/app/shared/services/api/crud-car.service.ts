@@ -12,6 +12,10 @@ import { Car } from './api-types';
 export class CrudCarService {
   constructor(private http: HttpClient) {}
 
+  getCar(id: number) {
+    return this.http.get<Car>(`${API_URL}/garage/${id}`);
+  }
+
   createCar(body: CarTemplate): Observable<Car> {
     return this.http
       .post<Car>(`${API_URL}/garage`, body, {
