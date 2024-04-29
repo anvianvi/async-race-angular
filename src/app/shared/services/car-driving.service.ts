@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { catchError, finalize, of } from 'rxjs';
 
 import { CarEngineService } from './api/car-engine.service';
 import { AnimationService } from './car-animation.service';
@@ -61,17 +62,23 @@ export class CarDrivingService {
   async stopDriving(id: number) {
     this.stopingngCarStatuses.set(id, false);
 
-    this.carEngineService.stopCar(id).subscribe({
-      next: () => {
-        this.animationService.stopAnimation(id);
+    this.carEngineService
+      .stopCar(id)
+      .pipe(
+        catchError(() => {
+          return of(null);
+        }),
+        finalize(() => {
+          this.animationService.stopAnimation(id);
 
-        const car = document.getElementById(`car-${id}`);
-        if (car) car.style.transform = 'translateX(0)';
+          const car = document.getElementById(`car-${id}`);
+          if (car) car.style.transform = 'translateX(0)';
 
-        this.brokenEngineStatuses.set(id, false);
-        this.animationService.stopAnimation(id);
-        this.drivingCarStatuses.set(id, true);
-      },
-    });
+          this.brokenEngineStatuses.set(id, false);
+          this.animationService.stopAnimation(id);
+          this.drivingCarStatuses.set(id, true);
+        }),
+      )
+      .subscribe();
   }
 }

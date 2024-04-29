@@ -1,5 +1,6 @@
 import { Component, computed, OnInit } from '@angular/core';
 
+import { CarImageComponent } from '../shared/components/car-image.component';
 import { CrudCarService } from '../shared/services/api/crud-car.service';
 // import { RouterOutlet } from '@angular/router';
 import { GetWinnersService } from '../shared/services/api/get-winners.service';
@@ -38,8 +39,10 @@ import { GetWinnersService } from '../shared/services/api/get-winners.service';
         @for (winner of listOfwinners(); track winner.id) {
           <tr>
             <td>{{ winner.id }}</td>
-            <td>{{ winner.id }} car color</td>
-            <td>{{ winner.id }}</td>
+            <td>
+              <app-car-image color="{{ winner.car.color }}"></app-car-image>
+            </td>
+            <td>{{ winner.car.name }}</td>
             <td>{{ winner.wins }}</td>
             <td>{{ winner.time }}</td>
           </tr>
@@ -50,6 +53,7 @@ import { GetWinnersService } from '../shared/services/api/get-winners.service';
     .winners-view {
     }
   `,
+  imports: [CarImageComponent],
 })
 export class WinnersComponent implements OnInit {
   listOfwinners = computed(() => {

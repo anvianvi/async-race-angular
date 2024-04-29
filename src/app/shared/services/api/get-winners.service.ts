@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
+import { forkJoin, map, Observable } from 'rxjs';
 
 import { API_URL } from '../../variables/api';
 import { CrudCarService } from './crud-car.service';
@@ -18,13 +18,6 @@ export type WinnerTemplate = {
   wins: number;
   time: number;
 };
-export interface WinnersResponse {
-  kind?: string;
-  etag?: string;
-  id: number;
-  wins: number;
-  time: number;
-}
 
 type SortField = 'id' | 'wins' | 'time';
 type SortOrder = 'ASC' | 'DESC';
@@ -33,7 +26,7 @@ type SortOrder = 'ASC' | 'DESC';
   providedIn: 'root',
 })
 export class GetWinnersService {
-  winnersInGarage = signal<WinnerTemplate[] | []>([]);
+  winnersInGarage = signal<Winner[] | []>([]);
   totalAmountofWinners = signal<number>(0);
   winnersCurrentPage = signal<number>(1);
   sortOrder = signal<SortOrder>('ASC');
@@ -42,10 +35,8 @@ export class GetWinnersService {
   elementsPerPageAccordingToRequirements = 5;
   elementsPerPage = this.elementsPerPageAccordingToRequirements;
 
-  constructor(
-    private getCarService: CrudCarService,
-    private http: HttpClient,
-  ) {}
+  constructor(private getCarService: CrudCarService) {}
+
   getWinners = async () => {
     const sortOrder = `_sort=${this.sortField()}&_order=${this.sortOrder()}`;
     const response = await fetch(
@@ -57,7 +48,30 @@ export class GetWinnersService {
     console.log(response);
     console.log(items);
 
-    this.winnersInGarage.set(items);
+    // const letstest = ;D
+    this.enrichWinnersWithCarDetails(items).subscribe((result) => {
+      this.winnersInGarage.set(result);
+    });
+
+    // this.winnersInGarage.set(items);
     this.totalAmountofWinners.set(count);
   };
+
+  enrichWinnersWithCarDetails(item: WinnerTemplate[]): Observable<Winner[]> {
+    const carRequests = item.map((winner) => {
+      return this.getCarService.getCar(winner.id).pipe(
+        map((carData) => ({
+          id: winner.id,
+          wins: winner.wins,
+          time: winner.time,
+          car: {
+            color: carData.color,
+            name: carData.name,
+          },
+        })),
+      );
+    });
+
+    return forkJoin(carRequests).pipe();
+  }
 }

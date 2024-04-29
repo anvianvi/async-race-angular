@@ -1,6 +1,7 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 
 import { Car } from '../services/api/api-types';
+import { CrudWinnerService } from '../services/api/crud-winner.service';
 import { CarDrivingService } from '../services/car-driving.service';
 import { CarRaceResults } from '../services/types';
 
@@ -17,25 +18,33 @@ import { CarRaceResults } from '../services/types';
   </div> `,
   styles: ``,
 })
-export class RaceControlComponent {
+export class RaceControlComponent implements OnInit {
   raceInprogress = signal(false);
   canResetRace = signal(false);
 
   @Input() cars!: Car[];
 
-  constructor(private carDrivingService: CarDrivingService) {}
+  constructor(
+    private carDrivingService: CarDrivingService,
+    private crudWinnerService: CrudWinnerService,
+  ) {}
+
+  ngOnInit(): void {
+    this.resetRace();
+  }
 
   async startRace(): Promise<Car | null> {
     this.raceInprogress.set(true);
     const promises: Promise<CarRaceResults>[] = this.cars.map(({ id }) =>
       this.carDrivingService.startDriving(id),
     );
-    this.canResetRace.set(true);
 
     const winner = await this.calculateRaceWinner(
       promises,
       this.cars.map((car) => car.id),
     );
+
+    this.canResetRace.set(true);
     this.raceInprogress.set(false);
 
     return winner;
@@ -73,7 +82,12 @@ export class RaceControlComponent {
     }
     console.log('winner is -> ');
     console.log(time, id, success);
-    // const winnerCar = store.cars.find((car) => car.id === id);
+
+    await this.crudWinnerService.saveWinnerResult(
+      id,
+      +(time / 1000).toFixed(2),
+    );
+
     return id as unknown as Car;
   };
 }
