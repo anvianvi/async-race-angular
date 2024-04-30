@@ -50,23 +50,16 @@ export class CrudWinnerService {
 
   async saveWinnerResult(id: number, time: number) {
     const winnerStatus = await CrudWinnerService.getWinnerStatus(id);
-    console.log(winnerStatus);
     if (winnerStatus === 404) {
-      console.log(' i in block to create new winner');
-
       this.createWinner({ id, wins: 1, time }).subscribe();
     } else {
       this.getWinner(id).subscribe((winner) => {
-        console.log(' i in block to update winner');
-        console.log(winner);
         const winnerTemplate: WinnerTemplate = {
           id,
           wins: winner.wins + 1,
           time: time < winner.time ? time : winner.time,
         };
-        this.updateWinner(winnerTemplate).subscribe((result) => {
-          console.log(result);
-        });
+        this.updateWinner(winnerTemplate).subscribe();
       });
     }
   }

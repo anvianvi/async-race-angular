@@ -33,30 +33,29 @@ export class RaceControlComponent implements OnInit {
     this.resetRace();
   }
 
-  async startRace(): Promise<Car | null> {
+  async startRace(): Promise<{ id: number; time: number }> {
     this.raceInprogress.set(true);
     const promises: Promise<CarRaceResults>[] = this.cars.map(({ id }) =>
       this.carDrivingService.startDriving(id),
     );
 
-    const winner = await this.calculateRaceWinner(
+    const { id, time } = await this.calculateRaceWinner(
       promises,
       this.cars.map((car) => car.id),
+    );
+    console.log(`i resive winner${id}${time}`);
+    await this.crudWinnerService.saveWinnerResult(
+      id,
+      +(time / 1000).toFixed(2),
     );
 
     this.canResetRace.set(true);
     this.raceInprogress.set(false);
 
-    return winner;
+    return { id, time };
   }
 
   resetRace = async () => {
-    // resetButton?.addEventListener('click', async () => {
-    //   const startRaceButton = document.getElementById(
-    //     'race',
-    //   ) as HTMLButtonElement;
-    //   const winnerMessage = document.getElementById('winner-mesage');
-    //   winnerMessage?.classList.remove('display');
     this.canResetRace.set(true);
     this.raceInprogress.set(true);
 
@@ -71,23 +70,16 @@ export class RaceControlComponent implements OnInit {
   calculateRaceWinner = async (
     promises: Promise<CarRaceResults>[],
     ids: number[],
-  ): Promise<Car | null> => {
+  ): Promise<{ id: number; time: number }> => {
     const { success, id, time } = await Promise.race(promises);
     if (!success) {
       const failedIndex = ids.findIndex((index: number) => index === id);
       promises.splice(failedIndex, 1);
       ids.splice(failedIndex, 1);
-      if (promises.length < 1) return null;
+      // if (promises.length < 1) break;
       return this.calculateRaceWinner(promises, ids);
     }
-    console.log('winner is -> ');
-    console.log(time, id, success);
 
-    await this.crudWinnerService.saveWinnerResult(
-      id,
-      +(time / 1000).toFixed(2),
-    );
-
-    return id as unknown as Car;
+    return { id, time };
   };
 }

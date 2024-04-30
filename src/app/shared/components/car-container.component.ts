@@ -79,11 +79,11 @@ import { CarImageComponent } from './car-image.component';
     `,
   ],
   imports: [
-    CarImageComponent,
     StartDrivingButtonComponent,
     StopDrivingButtonComponent,
     RemoveCarButtonComponent,
     EditCarButtonComponent,
+    CarImageComponent,
   ],
 })
 export class CarContainerComponent {

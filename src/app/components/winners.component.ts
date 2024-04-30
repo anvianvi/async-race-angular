@@ -1,14 +1,11 @@
 import { Component, computed, OnInit } from '@angular/core';
 
 import { CarImageComponent } from '../shared/components/car-image.component';
-import { CrudCarService } from '../shared/services/api/crud-car.service';
-// import { RouterOutlet } from '@angular/router';
 import { GetWinnersService } from '../shared/services/api/get-winners.service';
 
 @Component({
   selector: 'app-winners-page',
   standalone: true,
-  // imports: [RouterOutlet],
   template: `<div class="winners-heading">
       <div>Winners: {{ winnersCount() }}</div>
       <div>Page № {{ winnersCurrentPage() }}</div>
@@ -77,12 +74,8 @@ export class WinnersComponent implements OnInit {
   sortField = computed(() => {
     return this.getWinnersService.sortField();
   });
-  // type SortField = 'id' | 'wins' | 'time';
-  // type SortOrder = 'ASC' | 'DESC';
-  constructor(
-    private getWinnersService: GetWinnersService,
-    private getCarService: CrudCarService,
-  ) {}
+
+  constructor(private getWinnersService: GetWinnersService) {}
 
   ngOnInit(): void {
     this.getWinnersService.getWinners();
@@ -98,8 +91,6 @@ export class WinnersComponent implements OnInit {
   }
 
   sortWinners(field: 'id' | 'wins' | 'time') {
-    console.log(this.sortField());
-    console.log(this.sortOrder());
     if (field === this.sortField()) {
       if (this.sortOrder() === 'ASC') {
         this.getWinnersService.sortOrder.set('DESC');
@@ -108,11 +99,6 @@ export class WinnersComponent implements OnInit {
       }
     } else {
       this.getWinnersService.sortField.set(field);
-      // if (this.sortOrder() === 'ASC') {
-      //   this.getWinnersService.sortOrder.set('DESC');
-      // } else {
-      //   this.getWinnersService.sortOrder.set('ASC');
-      // }
       this.getWinnersService.sortOrder.set('ASC');
     }
     this.getWinnersService.getWinners();

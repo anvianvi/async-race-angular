@@ -32,7 +32,7 @@ export class GetWinnersService {
   sortOrder = signal<SortOrder>('ASC');
   sortField = signal<SortField>('id');
 
-  elementsPerPageAccordingToRequirements = 5;
+  elementsPerPageAccordingToRequirements = 10;
   elementsPerPage = this.elementsPerPageAccordingToRequirements;
 
   constructor(private getCarService: CrudCarService) {}
@@ -45,15 +45,10 @@ export class GetWinnersService {
 
     const count = Number(response.headers.get('X-Total-Count'));
     const items = (await response.json()) as WinnerTemplate[];
-    console.log(response);
-    console.log(items);
-
-    // const letstest = ;D
     this.enrichWinnersWithCarDetails(items).subscribe((result) => {
       this.winnersInGarage.set(result);
     });
 
-    // this.winnersInGarage.set(items);
     this.totalAmountofWinners.set(count);
   };
 
