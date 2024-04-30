@@ -5,6 +5,7 @@ import { GeneratePackOfCarsButtonComponent } from '../shared/components/buttons/
 import { CreateCarButtonComponent } from '../shared/components/buttons/create-car-button.component';
 import { CarContainerComponent } from '../shared/components/car-container.component';
 import { RaceControlComponent } from '../shared/components/reace-controll.component';
+import { WinnerPopupComponent } from '../shared/components/winner-popup.component';
 import { GetCarsService } from '../shared/services/api/get-cars.service';
 
 @Component({
@@ -27,6 +28,7 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
     } @else {
       <p>pls w8 we warm up the server</p>
     }
+    <app-winner-popup></app-winner-popup>
   </div> `,
   styles: `
     .garage-view {
@@ -39,6 +41,7 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
     CreateCarButtonComponent,
     GeneratePackOfCarsButtonComponent,
     RaceControlComponent,
+    WinnerPopupComponent,
   ],
 })
 export class GarageComponent implements OnInit, AfterViewChecked {
