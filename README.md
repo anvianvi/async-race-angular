@@ -1,27 +1,12 @@
-# AsyncRace
+# Async Race game app
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.5.
+[Deploy](https://anvianvi.github.io/async-race-angular/).
 
-## Development server
+## Server Configuration
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+By default, the app is configured to communicate with a remote server located at `https://flint-brazen-catshark.glitch.me/`.
 
-## Code scaffolding
+If you prefer to use a local server, you can comment out the line `const base = 'https://flint-brazen-catshark.glitch.me/';` in the `api.ts` file and uncomment `const base = 'http://127.0.0.1:3000/'`.
+https://github.com/mikhama/async-race-api - repo with server.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Please note that the initial server response time may be around 20 seconds.
