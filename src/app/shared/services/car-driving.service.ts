@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
-import { catchError, finalize, of } from 'rxjs';
+import {
+  catchError,
+  finalize,
+  firstValueFrom,
+  map,
+  of,
+  Subscription,
+} from 'rxjs';
 
 import { CarEngineService } from './api/car-engine.service';
 import { AnimationService } from './car-animation.service';
-import { PositionCalculationService } from './position-calculation.service';
 import { CarRaceResults } from './types';
 
 @Injectable({
@@ -13,6 +19,7 @@ export class CarDrivingService {
   private drivingCarStatuses = new Map<number, boolean>();
   private stopingngCarStatuses = new Map<number, boolean>();
   private brokenEngineStatuses = new Map<number, boolean>();
+  driveCarSubscriptions: { [key: number]: Subscription } = {};
 
   constructor(
     private carEngineService: CarEngineService,
@@ -34,22 +41,22 @@ export class CarDrivingService {
   async startDriving(id: number): Promise<CarRaceResults> {
     this.drivingCarStatuses.set(id, false);
 
-    const car = document.getElementById(`car-${id}`) as HTMLElement;
-    const flag = document.getElementById(`flag-${id}`) as HTMLElement;
-
-    const { velocity, distance } = await CarEngineService.startCar(id);
-    const time = Math.round(distance / velocity);
-
-    const carModelWidthInPx = 90;
-    const currentDistance = Math.floor(
-      PositionCalculationService.calculateDistance(car, flag) +
-        carModelWidthInPx,
+    const results = this.carEngineService.startOrStopEngine(id, 'started').pipe(
+      map((response) => ({
+        velocity: response.velocity,
+        distance: response.distance,
+      })),
     );
 
-    this.animationService.startAnimation(id, car, currentDistance, time);
+    const { velocity, distance } = await firstValueFrom(results);
+    const time = Math.round(distance / velocity);
 
+    this.animationService.startAnimation(id, time);
     this.stopingngCarStatuses.set(id, true);
-    const { success } = await CarEngineService.driveCar(id);
+
+    const { success } = await firstValueFrom(
+      this.carEngineService.driveCar(id),
+    );
 
     if (!success) {
       this.animationService.stopAnimation(id);
@@ -63,7 +70,7 @@ export class CarDrivingService {
     this.stopingngCarStatuses.set(id, false);
 
     this.carEngineService
-      .stopCar(id)
+      .startOrStopEngine(id, 'stopped')
       .pipe(
         catchError(() => {
           return of(null);
