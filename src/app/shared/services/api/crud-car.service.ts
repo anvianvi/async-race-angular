@@ -17,19 +17,15 @@ export class CrudCarService {
   }
 
   createCar(body: CarTemplate): Observable<Car> {
-    return this.http
-      .post<Car>(`${API_URL}/garage`, body, {
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .pipe();
+    return this.http.post<Car>(`${API_URL}/garage`, body, {
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   updateCar(body: CarTemplate, id: number): Observable<Car> {
-    return this.http
-      .put<Car>(`${API_URL}/garage/${id}`, body, {
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .pipe();
+    return this.http.put<Car>(`${API_URL}/garage/${id}`, body, {
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   deleteCar(id: number): Observable<void> {

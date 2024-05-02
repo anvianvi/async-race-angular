@@ -13,17 +13,13 @@ export class CrudWinnerService {
   constructor(private http: HttpClient) {}
 
   getWinner(id: number): Observable<GetWinnerResponse> {
-    return this.http
-      .get<GetWinnerResponse>(`${API_URL}/winners/${id}`, {})
-      .pipe();
+    return this.http.get<GetWinnerResponse>(`${API_URL}/winners/${id}`, {});
   }
 
   createWinner(body: WinnerTemplate): Observable<Car> {
-    return this.http
-      .post<Car>(`${API_URL}/winners`, body, {
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .pipe();
+    return this.http.post<Car>(`${API_URL}/winners`, body, {
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   updateWinner(winnerTemplate: WinnerTemplate): Observable<Car> {
@@ -32,11 +28,9 @@ export class CrudWinnerService {
       time: winnerTemplate.time,
     };
 
-    return this.http
-      .put<Car>(`${API_URL}/winners/${winnerTemplate.id}`, body, {
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .pipe();
+    return this.http.put<Car>(`${API_URL}/winners/${winnerTemplate.id}`, body, {
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   deleteWinner(id: number): Observable<void> {
