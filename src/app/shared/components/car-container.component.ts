@@ -95,13 +95,3 @@ export class CarContainerComponent {
     return this.carDrivingService.isEngineBroken(id);
   }
 }
-
-// <!-- <button class="start-engine-btn" id="start-engine-car-${car.id}"> -->
-// <!-- Start -->
-// <!-- </button> -->
-// <!-- <button class="stop-engine-btn" id="stop-engine-car-${car.id}" disabled> -->
-// <!-- Stop -->
-// <!-- </button> -->
-
-// <!-- <button class="select-btn" id="select-car-${car.id}">Select</button> -->
-// <!-- <button class="remove-btn" id="remove-car-${car.id}">Remove</button> -->

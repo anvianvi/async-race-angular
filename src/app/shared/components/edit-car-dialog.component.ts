@@ -69,7 +69,7 @@ export class EditCarDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<EditCarDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public existingCar: Car | undefined, // Make initialCar optional
+    @Inject(MAT_DIALOG_DATA) public existingCar: Car | undefined,
     private ngZone: NgZone,
     private crudCarService: CrudCarService,
     private getCarsService: GetCarsService,
