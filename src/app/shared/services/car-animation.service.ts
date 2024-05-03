@@ -48,6 +48,8 @@ export class AnimationService {
   }
 
   stopAnimation(carId: number) {
-    window.cancelAnimationFrame(this.animations[carId].id);
+    if (this.animations[carId]) {
+      window.cancelAnimationFrame(this.animations[carId].id);
+    }
   }
 }
