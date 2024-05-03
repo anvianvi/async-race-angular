@@ -1,13 +1,17 @@
 import { Component, computed, Input, OnInit } from '@angular/core';
 
 import { Car } from '../services/api/api-types';
+import { CarDrivingService } from '../services/car-driving.service';
 import { RaceProcessService } from '../services/race-process.service';
 
 @Component({
   selector: 'app-race-control',
   standalone: true,
   template: `<div class="">
-    <button (click)="startRace()" [disabled]="raceInprogress()">
+    <button
+      (click)="startRace()"
+      [disabled]="raceInprogress() || isAnyCarInDrivingMode()"
+    >
       Start Race
     </button>
     <button (click)="stopRace()" [disabled]="!canResetRace()">
@@ -24,9 +28,13 @@ export class RaceControlComponent implements OnInit {
   raceInprogress = computed(() => {
     return this.raceService.raceInprogress();
   });
+
   @Input() cars!: Car[];
 
-  constructor(private raceService: RaceProcessService) {}
+  constructor(
+    private raceService: RaceProcessService,
+    private carDrivingService: CarDrivingService,
+  ) {}
 
   ngOnInit(): void {
     this.raceService.resetRace();
@@ -36,5 +44,8 @@ export class RaceControlComponent implements OnInit {
   }
   stopRace() {
     this.raceService.resetRace();
+  }
+  isAnyCarInDrivingMode(): boolean {
+    return this.carDrivingService.isAnyCarInDrivingMode();
   }
 }

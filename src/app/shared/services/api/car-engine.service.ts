@@ -1,12 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, EMPTY, Observable, of } from 'rxjs';
+import { catchError, EMPTY, map, Observable, of } from 'rxjs';
 
 import { API_URL } from '../../variables/api';
-
-type DriveCarResponse = {
-  success: boolean;
-};
 
 type EngineResponse = {
   velocity: number;
@@ -29,13 +25,14 @@ export class CarEngineService {
     );
   }
 
-  driveCar(id: number): Observable<DriveCarResponse> {
+  driveCar(id: number): Observable<boolean> {
     return this.http
-      .patch<DriveCarResponse>(`${API_URL}/engine?id=${id}&status=drive`, {})
+      .patch<boolean>(`${API_URL}/engine?id=${id}&status=drive`, {})
       .pipe(
+        map(() => true),
         catchError((error) => {
           if (error.status === 500) {
-            return of({ success: false });
+            return of(false);
           }
           return EMPTY;
         }),

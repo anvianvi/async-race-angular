@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, Input } from '@angular/core';
 
 import { CarDrivingService } from '../../services/car-driving.service';
+import { RaceProcessService } from '../../services/race-process.service';
 
 @Component({
   selector: 'app-stop-driving-button',
@@ -8,14 +9,20 @@ import { CarDrivingService } from '../../services/car-driving.service';
   template: `<button
     id="stop-engine-car-{{ id }}"
     (click)="stopDriving(id)"
-    [disabled]="!canStopDriving(id)"
+    [disabled]="raceInprogress() || !canStopDriving(id)"
   >
     Stop Ride
   </button>`,
   styles: ``,
 })
 export class StopDrivingButtonComponent {
-  constructor(private carDrivingService: CarDrivingService) {}
+  raceInprogress = computed(() => {
+    return this.raceService.raceInprogress();
+  });
+  constructor(
+    private carDrivingService: CarDrivingService,
+    private raceService: RaceProcessService,
+  ) {}
 
   @Input() id!: number;
 

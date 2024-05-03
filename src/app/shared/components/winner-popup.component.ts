@@ -1,7 +1,7 @@
 import { Component, computed } from '@angular/core';
 
-import { GetCarsService } from '../services/api/get-cars.service';
 import { RaceProcessService } from '../services/race-process.service';
+import { SetWinnerService } from '../services/set-winner.service';
 
 @Component({
   selector: 'app-winner-popup',
@@ -16,10 +16,10 @@ import { RaceProcessService } from '../services/race-process.service';
       >
         <div class="winner-popup">
           <h1>Congratulations to the Winner!</h1>
-
           <p>
-            Car: {{ cars()[currentWinnerId()].name }} with time:
-            {{ currentWinnerTime() }}
+            Car: {{ winner().car.name }} with time:
+            {{ winner().car.color }}
+            {{ winner().time }}
             seconds!
           </p>
           <button (click)="closePopup()">Close</button>
@@ -74,34 +74,25 @@ import { RaceProcessService } from '../services/race-process.service';
   `,
 })
 export class WinnerPopupComponent {
-  cars = computed(() => {
-    return this.getCarsService.carsInGarage();
+  winner = computed(() => {
+    return this.setWinnerService.curentWinner();
   });
 
   displayCurrentWinner = computed(() => {
     return this.raceService.displayCurrentWinner();
   });
 
-  currentWinnerId = computed(() => {
-    return this.raceService.currentWinnersId();
-  });
-  currentWinnerTime = computed(() => {
-    return this.raceService.currentWinnersTime();
-  });
-
   constructor(
     private raceService: RaceProcessService,
-    private getCarsService: GetCarsService,
+    private setWinnerService: SetWinnerService,
   ) {}
+
   closePopup() {
     this.raceService.resetRace();
-
-    console.log('Mersedes went first in 2.89 seconds!');
-    // console.log(this.currentWinner());
   }
+
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
-      // Close popup on Escape key
       this.closePopup();
     }
   }

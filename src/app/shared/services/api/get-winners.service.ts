@@ -6,7 +6,7 @@ import { CrudCarService } from './crud-car.service';
 
 export type Winner = {
   id: number;
-  wins: number;
+  wins?: number;
   time: number;
   car: {
     color: string;
