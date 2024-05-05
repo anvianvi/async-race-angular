@@ -53,7 +53,6 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
         period of non-use, it takes 5-15 seconds to turn on. Please wait
       </p>
     }
-    <app-data-sourse-selector></app-data-sourse-selector>
     <app-winner-popup></app-winner-popup>
   </div> `,
   styles: `

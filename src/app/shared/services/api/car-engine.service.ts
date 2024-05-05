@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { computed, Injectable } from '@angular/core';
 import { catchError, EMPTY, map, Observable, of } from 'rxjs';
 
-import { API_URL } from '../../variables/api';
+import { DataSourseService } from './data-sourse.service';
 
 type EngineResponse = {
   velocity: number;
@@ -13,21 +13,28 @@ type EngineResponse = {
   providedIn: 'root',
 })
 export class CarEngineService {
-  constructor(private http: HttpClient) {}
+  API_URL = computed(() => {
+    return this.dataSourseService.API_URL();
+  });
+
+  constructor(
+    private http: HttpClient,
+    private dataSourseService: DataSourseService,
+  ) {}
 
   startOrStopEngine(
     id: number,
     status: 'started' | 'stopped',
   ): Observable<EngineResponse> {
     return this.http.patch<EngineResponse>(
-      `${API_URL}/engine/?id=${id}&status=${status}`,
+      `${this.API_URL()}/engine/?id=${id}&status=${status}`,
       {},
     );
   }
 
   driveCar(id: number): Observable<boolean> {
     return this.http
-      .patch<boolean>(`${API_URL}/engine?id=${id}&status=drive`, {})
+      .patch<boolean>(`${this.API_URL()}/engine?id=${id}&status=drive`, {})
       .pipe(
         map(() => true),
         catchError((error) => {

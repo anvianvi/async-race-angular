@@ -1,8 +1,8 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { forkJoin, map, Observable } from 'rxjs';
 
-import { API_URL } from '../../variables/api';
 import { CrudCarService } from './crud-car.service';
+import { DataSourseService } from './data-sourse.service';
 
 export type Winner = {
   id: number;
@@ -35,12 +35,19 @@ export class GetWinnersService {
   elementsPerPageAccordingToRequirements = 10;
   elementsPerPage = this.elementsPerPageAccordingToRequirements;
 
-  constructor(private getCarService: CrudCarService) {}
+  API_URL = computed(() => {
+    return this.dataSourseService.API_URL();
+  });
+
+  constructor(
+    private dataSourseService: DataSourseService,
+    private getCarService: CrudCarService,
+  ) {}
 
   getWinners = async () => {
     const sortOrder = `_sort=${this.sortField()}&_order=${this.sortOrder()}`;
     const response = await fetch(
-      `${API_URL}/winners?_page=${this.winnersCurrentPage()}&_limit=${this.elementsPerPage}&${sortOrder}`,
+      `${this.API_URL()}/winners?_page=${this.winnersCurrentPage()}&_limit=${this.elementsPerPage}&${sortOrder}`,
     );
 
     const count = Number(response.headers.get('X-Total-Count'));

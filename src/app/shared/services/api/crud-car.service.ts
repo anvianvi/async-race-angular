@@ -1,34 +1,41 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { computed, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { API_URL } from '../../variables/api';
 import { CarTemplate } from '../random-generators.service';
 import { Car } from './api-types';
+import { DataSourseService } from './data-sourse.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CrudCarService {
-  constructor(private http: HttpClient) {}
+  API_URL = computed(() => {
+    return this.dataSourseService.API_URL();
+  });
+
+  constructor(
+    private http: HttpClient,
+    private dataSourseService: DataSourseService,
+  ) {}
 
   getCar(id: number): Observable<Car> {
-    return this.http.get<Car>(`${API_URL}/garage/${id}`);
+    return this.http.get<Car>(`${this.API_URL()}/garage/${id}`);
   }
 
   createCar(body: CarTemplate): Observable<Car> {
-    return this.http.post<Car>(`${API_URL}/garage`, body, {
+    return this.http.post<Car>(`${this.API_URL()}/garage`, body, {
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
   updateCar(body: CarTemplate, id: number): Observable<Car> {
-    return this.http.put<Car>(`${API_URL}/garage/${id}`, body, {
+    return this.http.put<Car>(`${this.API_URL()}/garage/${id}`, body, {
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
   deleteCar(id: number): Observable<void> {
-    return this.http.delete<void>(`${API_URL}/garage/${id}`, {}).pipe();
+    return this.http.delete<void>(`${this.API_URL()}/garage/${id}`, {}).pipe();
   }
 }

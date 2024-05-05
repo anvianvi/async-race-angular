@@ -3,17 +3,13 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
+import { DataSorseToglerComponent } from './data-source-selector.component';
+
 @Component({
   selector: 'app-navigation-bar',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
-    MatButtonModule,
-  ],
   template: `<div class="nav-container">
+    <app-data-sourse-selector></app-data-sourse-selector>
     <nav>
       <a
         class="nav-button"
@@ -64,5 +60,13 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       background: #fafaff;
     }
   `,
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    MatButtonModule,
+    DataSorseToglerComponent,
+  ],
 })
 export class NavigationComponent {}
