@@ -27,16 +27,19 @@ export class SetWinnerService {
   ) {}
 
   setWinner(id: number, time: number) {
-    const winnersCar = this.cars()[id - 1];
-    const curentWinner: Winner = {
-      id,
-      time,
-      car: {
-        color: winnersCar.color,
-        name: winnersCar.name,
-      },
-    };
-    this.curentWinner.set(curentWinner);
-    this.crudWinnerService.saveWinnerResult(id, time);
+    const winnersCar = this.cars().find((car) => car.id === id);
+
+    if (winnersCar) {
+      const curentWinner: Winner = {
+        id,
+        time,
+        car: {
+          color: winnersCar.color,
+          name: winnersCar.name,
+        },
+      };
+      this.curentWinner.set(curentWinner);
+      this.crudWinnerService.saveWinnerResult(id, time);
+    }
   }
 }
