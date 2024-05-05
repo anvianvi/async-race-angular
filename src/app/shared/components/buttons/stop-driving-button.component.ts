@@ -11,7 +11,7 @@ import { RaceProcessService } from '../../services/race-process.service';
   selector: 'app-stop-driving-button',
   standalone: true,
   template: ` <button
-    [disabled]="!raceInprogress() || !canStopDriving(id)"
+    [disabled]="canStopDriving(id) || raceInprogress()"
     mat-icon-button
     matTooltip="Stop ride of this car"
     class="stop-drive-car-button"

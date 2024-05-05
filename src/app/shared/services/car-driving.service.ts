@@ -12,7 +12,6 @@ import { CarRaceResults } from './types';
 export class CarDrivingService {
   private IsCarInDrivingModeStatuses = new Map<number, boolean>();
   private IsCarInStopingModeStatuses = new Map<number, boolean>();
-
   private brokenEngineStatuses = new Map<number, boolean>();
 
   driveCarSubscriptions: { [key: number]: Subscription } = {};
@@ -26,15 +25,13 @@ export class CarDrivingService {
   canTurnCarInDriving(id: number): boolean {
     return this.IsCarInDrivingModeStatuses.get(id) ?? true;
   }
-
+  canStopCar(id: number): boolean {
+    return this.IsCarInStopingModeStatuses.get(id) ?? true;
+  }
   isAnyCarInDrivingMode(): boolean {
     return Array.from(this.IsCarInDrivingModeStatuses.values()).some(
       (status) => !status,
     );
-  }
-
-  canStopCar(id: number): boolean {
-    return this.IsCarInStopingModeStatuses.get(id) ?? false;
   }
 
   isEngineBroken(id: number): boolean {
@@ -43,7 +40,6 @@ export class CarDrivingService {
 
   startDriving(id: number): Observable<CarRaceResults> {
     this.IsCarInDrivingModeStatuses.set(id, false);
-
     return new Observable<CarRaceResults>((observer) => {
       this.carEngineService.startOrStopEngine(id, 'started').subscribe({
         next: (response) => {
@@ -51,6 +47,7 @@ export class CarDrivingService {
           const time = Math.round(distance / velocity);
 
           this.animationService.startAnimation(id, time);
+          this.IsCarInStopingModeStatuses.set(id, false);
 
           const subscription = this.carEngineService.driveCar(id).subscribe({
             next: (success) => {
@@ -65,7 +62,6 @@ export class CarDrivingService {
             },
           });
           this.driveSubscriptionsService.add(id, subscription);
-          this.IsCarInStopingModeStatuses.set(id, true);
         },
         error: (err) => {
           observer.error(err);
@@ -76,6 +72,7 @@ export class CarDrivingService {
 
   async stopDriving(id: number) {
     this.IsCarInStopingModeStatuses.set(id, true);
+
     this.driveSubscriptionsService.unsubscribe(id);
 
     this.animationService.stopAnimation(id);
@@ -87,7 +84,6 @@ export class CarDrivingService {
     this.carEngineService.startOrStopEngine(id, 'stopped').subscribe({
       complete: () => {
         this.IsCarInDrivingModeStatuses.set(id, true);
-        this.IsCarInStopingModeStatuses.set(id, false);
       },
     });
   }
