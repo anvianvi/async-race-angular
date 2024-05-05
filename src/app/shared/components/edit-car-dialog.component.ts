@@ -36,6 +36,8 @@ import {
         class="car-name-input"
         name="carName"
         [(ngModel)]="carTemplate.name"
+        maxlength="40"
+        minlength="1"
       />
       <input
         type="color"
