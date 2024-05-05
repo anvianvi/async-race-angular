@@ -14,11 +14,11 @@ import { CarImageComponent } from './car-image.component';
   template: `
     <div class="car-container">
       <div class="controll-buttons">
+        <app-remove-car-button [id]="car.id"></app-remove-car-button>
+        <app-edit-car-button [car]="car"></app-edit-car-button>
         <app-start-driving-button [id]="car.id"> </app-start-driving-button>
         <app-stop-driving-button [id]="car.id"> </app-stop-driving-button>
         <span class="car-name">{{ car.name }}</span>
-        <app-remove-car-button [id]="car.id"> </app-remove-car-button>
-        <app-edit-car-button [car]="car"></app-edit-car-button>
       </div>
 
       <div class="road" id="car-road-{{ car.id }}">
@@ -26,25 +26,26 @@ import { CarImageComponent } from './car-image.component';
           <app-car-image color="{{ car.color }}"></app-car-image>
         </div>
         <div class="flag" id="flag-{{ car.id }}">🏁</div>
-        @if (isEngineBroken(car.id)) {
-          <div id="engine-broke-{{ car.id }}" class="message">
-            Sad ;&lpar; Engine Broke Down
-          </div>
-        }
       </div>
+
+      @if (isEngineBroken(car.id)) {
+        <div id="engine-broke-{{ car.id }}" class="message">
+          Sad ;&lpar; Engine Broke Down
+        </div>
+      }
     </div>
   `,
   styles: [
     `
-      ::ng-deep app-not-found {
-      }
       .car-container {
-        margin: 20px 0 0;
+        margin-bottom: 12px;
         position: relative;
       }
       .controll-buttons {
         display: flex;
-        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
       }
       .road {
         border-bottom: 3px dashed #fff;

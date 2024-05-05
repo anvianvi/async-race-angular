@@ -2,6 +2,7 @@ import { Component, computed, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
 import { CrudCarService } from '../../services/api/crud-car.service';
 import { CrudWinnerService } from '../../services/api/crud-winner.service';
@@ -10,13 +11,14 @@ import { CarDrivingService } from '../../services/car-driving.service';
 import { RaceProcessService } from '../../services/race-process.service';
 
 @Component({
-  imports: [MatButtonModule, MatDividerModule, MatIconModule],
+  imports: [MatButtonModule, MatDividerModule, MatIconModule, MatTooltip],
 
   selector: 'app-remove-car-button',
   standalone: true,
   template: `
     <button
       mat-icon-button
+      matTooltip="Delete this car"
       class="remove-car-button"
       [disabled]="!isCarInDriving(id) || raceInprogress()"
       (click)="removeCarFromGarage(id)"
@@ -25,9 +27,6 @@ import { RaceProcessService } from '../../services/race-process.service';
     </button>
   `,
   styles: `
-    ::ng-deep app-remove-car-button {
-      margin-left: auto;
-    }
     .remove-car-button {
       color: white;
       &:hover {
