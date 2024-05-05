@@ -16,7 +16,7 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
   template: `<div class="garage-view">
     @if (cars().length > 0) {
       <div class="garage-title-container">
-        Currently you have {{ carsCount() }} cars in garage.
+        Currently you have {{ carsCount() }} cars in garage
         <app-create-car-button></app-create-car-button>
         <app-create-pack-of-cars-button></app-create-pack-of-cars-button>
       </div>
