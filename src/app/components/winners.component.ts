@@ -1,19 +1,35 @@
 import { Component, computed, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 import { CarImageComponent } from '../shared/components/car-image.component';
 import { GetWinnersService } from '../shared/services/api/get-winners.service';
 
 @Component({
+  imports: [CarImageComponent, MatIconModule, MatButtonModule],
   selector: 'app-winners-page',
   standalone: true,
-  template: `<div class="winners-heading">
-      <div>Winners: {{ winnersCount() }}</div>
-      <div>Page № {{ winnersCurrentPage() }}</div>
+  template: ` <div class="winners-view">
+    <div class="winners-heading">
+      <div class="pagination-container">
+        <button
+          mat-icon-button
+          (click)="paginationLeft()"
+          [disabled]="winnersCurrentPage() < 2"
+        >
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <div>Page {{ winnersCurrentPage() }} / {{ totalPages() }}</div>
+
+        <button
+          mat-icon-button
+          (click)="paginationRight()"
+          [disabled]="isLastPage()"
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
     </div>
-    <button (click)="paginationLeft()" [disabled]="winnersCurrentPage() < 2">
-      PREV
-    </button>
-    <button (click)="paginationRight()" [disabled]="isLastPage()">NEXT</button>
     <table cellspacing="3" border="0" cellpadding="3">
       <thead>
         <th>№</th>
@@ -35,22 +51,52 @@ import { GetWinnersService } from '../shared/services/api/get-winners.service';
       <tbody>
         @for (winner of listOfwinners(); track winner.id) {
           <tr>
-            <td>{{ winner.id }}</td>
-            <td>
+            <td class="col1">{{ winner.id }}</td>
+            <td class="col2">
               <app-car-image color="{{ winner.car.color }}"></app-car-image>
             </td>
-            <td>{{ winner.car.name }}</td>
-            <td>{{ winner.wins }}</td>
-            <td>{{ winner.time }}</td>
+            <td class="col3">{{ winner.car.name }}</td>
+            <td class="col4">{{ winner.wins }}</td>
+            <td class="col5">{{ winner.time }}</td>
           </tr>
         }
       </tbody>
-    </table>`,
+    </table>
+  </div>`,
   styles: `
     .winners-view {
+      width: 80vw;
+      margin-inline: auto;
+
+      th {
+        text-align: left;
+      }
+      .col1 {
+        min-width: 35px;
+      }
+      .col3 {
+        min-width: 50px;
+        max-width: 19vw;
+
+        word-wrap: break-word;
+      }
+      @media screen and (width> 700px) {
+        .col3 {
+          max-width: 39vw;
+        }
+      }
+      .col4,
+      .col5 {
+        min-width: 40px;
+      }
+    }
+    .pagination-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
     }
   `,
-  imports: [CarImageComponent],
 })
 export class WinnersComponent implements OnInit {
   listOfwinners = computed(() => {
@@ -66,6 +112,11 @@ export class WinnersComponent implements OnInit {
     return (
       this.winnersCount() / this.getWinnersService.elementsPerPage <=
       this.getWinnersService.winnersCurrentPage()
+    );
+  });
+  totalPages = computed(() => {
+    return Math.ceil(
+      this.winnersCount() / this.getWinnersService.elementsPerPage,
     );
   });
   sortOrder = computed(() => {
