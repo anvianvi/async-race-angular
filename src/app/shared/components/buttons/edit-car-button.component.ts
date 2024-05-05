@@ -14,11 +14,11 @@ import { EditCarDialogComponent } from '../edit-car-dialog.component';
   selector: 'app-edit-car-button',
   standalone: true,
   template: `<button
+    [disabled]="!isCarInDriving(car.id) || raceInprogress()"
     class="edit-car-button"
     mat-icon-button
     matTooltip="Edit this car"
     (click)="openEditCarDialog()"
-    [disabled]="!isCarInDriving(car.id) || raceInprogress()"
   >
     <mat-icon>edit</mat-icon>
   </button> `,
@@ -27,6 +27,9 @@ import { EditCarDialogComponent } from '../edit-car-dialog.component';
       color: white;
       &:hover {
         color: yellow;
+      }
+      &:disabled {
+        color: #0c2637;
       }
     }
   `,

@@ -1,6 +1,5 @@
 import { Component, computed, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 
@@ -8,17 +7,16 @@ import { CarDrivingService } from '../../services/car-driving.service';
 import { RaceProcessService } from '../../services/race-process.service';
 
 @Component({
-  imports: [MatButtonModule, MatDividerModule, MatIconModule, MatTooltip],
+  imports: [MatButtonModule, MatIconModule, MatTooltip],
   selector: 'app-stop-driving-button',
   standalone: true,
   template: ` <button
+    [disabled]="!raceInprogress() || !canStopDriving(id)"
     mat-icon-button
-    disabledInteractive
-    matTooltip="Stom ride of this car"
+    matTooltip="Stop ride of this car"
     class="stop-drive-car-button"
     id="stop-engine-car-{{ id }}"
     (click)="stopDriving(id)"
-    [disabled]="raceInprogress() || !canStopDriving(id)"
   >
     <mat-icon>stop</mat-icon>
   </button>`,
@@ -27,6 +25,9 @@ import { RaceProcessService } from '../../services/race-process.service';
       color: white;
       &:hover {
         color: orange;
+      }
+      &:disabled {
+        color: #0c2637;
       }
     }
   `,

@@ -26,13 +26,13 @@ import { CarImageComponent } from './car-image.component';
           <app-car-image color="{{ car.color }}"></app-car-image>
         </div>
         <div class="flag" id="flag-{{ car.id }}">🏁</div>
-      </div>
 
-      @if (isEngineBroken(car.id)) {
-        <div id="engine-broke-{{ car.id }}" class="message">
-          Sad ;&lpar; Engine Broke Down
-        </div>
-      }
+        @if (isEngineBroken(car.id)) {
+          <div id="engine-broke-{{ car.id }}" class="message">
+            Sad ;&lpar; Engine Broke Down
+          </div>
+        }
+      </div>
     </div>
   `,
   styles: [

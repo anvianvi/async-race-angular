@@ -7,18 +7,34 @@ import { RaceProcessService } from '../services/race-process.service';
 @Component({
   selector: 'app-race-control',
   standalone: true,
-  template: `<div class="">
+  template: `<div class="race-buttons-container">
     <button
+      class="race-button"
       (click)="startRace()"
       [disabled]="raceInprogress() || isAnyCarInDrivingMode()"
     >
       Start Race
     </button>
-    <button (click)="stopRace()" [disabled]="!canResetRace()">
+
+    <button
+      class="race-button"
+      (click)="stopRace()"
+      [disabled]="!canResetRace()"
+    >
       Reset Race
     </button>
   </div> `,
-  styles: ``,
+  styles: `
+    .race-buttons-container {
+      display: flex;
+      gap: 10px;
+    }
+    .race-button {
+      padding: 10px;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+  `,
 })
 export class RaceControlComponent implements OnInit {
   canResetRace = computed(() => {
