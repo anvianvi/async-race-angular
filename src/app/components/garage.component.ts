@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-import { AfterViewChecked, Component, computed, OnInit } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -99,7 +98,7 @@ import { GetCarsService } from '../shared/services/api/get-cars.service';
     DataSorseToglerComponent,
   ],
 })
-export class GarageComponent implements OnInit, AfterViewChecked {
+export class GarageComponent implements OnInit {
   cars = computed(() => {
     return this.getCarsService.carsInGarage();
   });
@@ -119,11 +118,6 @@ export class GarageComponent implements OnInit, AfterViewChecked {
     return Math.ceil(this.carsCount() / this.getCarsService.elementsPerPage);
   });
   constructor(private getCarsService: GetCarsService) {}
-
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method, class-methods-use-this
-  ngAfterViewChecked(): void {
-    console.log('Change detection triggered!');
-  }
 
   ngOnInit(): void {
     this.getCarsService.getCars();

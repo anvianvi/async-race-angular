@@ -17,9 +17,7 @@ import { SetWinnerService } from '../services/set-winner.service';
         <div class="winner-popup">
           <h1>Congratulations to the Winner!</h1>
           <p>
-            Car: {{ winner().car.name }} with time:
-            {{ winner().car.color }}
-            {{ winner().time }}
+            Car: {{ winner().car.name }} with time: {{ winner().time }}
             seconds!
           </p>
           <button (click)="closePopup()">Close</button>
